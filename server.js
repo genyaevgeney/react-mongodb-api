@@ -18,7 +18,7 @@ exports.configure = async () => {
 		next()
 	})
 	app.use(bodyParser.urlencoded({ extended: true }))
-	app.use(bodyParser.json())
+	// app.use(bodyParser.json())
 	app.use('/', router)
 	db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 }

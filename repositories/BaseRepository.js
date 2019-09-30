@@ -4,18 +4,15 @@ module.exports = class BaseRepository {
     if (new.target === BaseRepository) {
       throw new TypeError("Cannot construct Abstract instances directly");
     }
+    this.model
+
   }
 
-  create() {
-    const userModel = new User ({
-      login : bodyData.login,
-      email : bodyData.email,
-      password : bodyData.password
-    })
-
-    userModel.save()
+  create(data) {
+    const donationModel = new this.model(data)
+    donationModel.save()
     .then(function(doc){
-      console.log("Сохранен объект", doc);
+      console.log("Saved item", doc);
     })
     .catch(function (err){
       console.log("Error");

@@ -9,7 +9,7 @@ class DonationService {
 
     if (page < 1) return [{ badRequest: badRequest }]
 
-    const currentPage = Number(reqPage)
+      const currentPage = Number(reqPage)
     const collectionCount = await donationRepository.getCollectionCount()
     let paginationPages = Math.ceil(collectionCount / perPage);
 
@@ -24,16 +24,16 @@ class DonationService {
     const amountForThisMonth = await donationRepository.getAmountForThisMonth(startDate, endDate)
 
     return [
-      {
-        donations: await donationRepository.getPaginationPageData(perPage, page),
-        current: page,
-        paginationPages: paginationPages,
-        maxAmount: maxAmount,
-        topDonator: await donationRepository.getTopDonatorName(maxAmount),
-        amount: await donationRepository.sumAmount(),
-        amountForThisMonth: amountForThisMonth,
-        dataForChart: await donationRepository.getChartInfo()
-      }
+    {
+      donations: await donationRepository.getPaginationPageData(perPage, page),
+      current: page,
+      paginationPages: paginationPages,
+      maxAmount: maxAmount,
+      topDonator: await donationRepository.getTopDonatorName(maxAmount),
+      amount: await donationRepository.sumAmount(),
+      amountForThisMonth: amountForThisMonth,
+      dataForChart: await donationRepository.getChartInfo()
+    }
     ];
   }
 
@@ -46,6 +46,11 @@ class DonationService {
       date : new Date()
     }
     donationRepository.create(postData)
+  }
+
+  async getErrorPageData(bodyData) {
+    const badRequest = true
+    return [{ badRequest: badRequest }]
   }
 }
 

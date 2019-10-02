@@ -26,11 +26,11 @@ class PhoneItem extends React.Component {
     super(props);
   }
   render() {
-     
     return <div>
                 <p>
                     <b>{this.props.text}</b><br />
                     <button onClick={() => this.props.deletePhone(this.props.text)}>Удалить</button> 
+                    <button onClick={() => this.props.deleteAll({phones: [ "iPhone 7 Plus", "Samsung Galaxy A5" ]})}>Обновить</button> 
                 </p>
             </div>
   }
@@ -45,7 +45,8 @@ class PhonesList extends React.Component {
         {this.props.phones.map(item =>
           <PhoneItem key={item}
                     text={item}
-                    deletePhone={this.props.deletePhone}/>
+                    deletePhone={this.props.deletePhone}
+                    deleteAll={this.props.deleteAll}/>
         )}
       </div>
   }
@@ -63,7 +64,7 @@ class AppView extends React.Component {
  
 function mapStateToProps(state) {
   return {
-    phones: state.get("phones")
+    phones: state.get("phones"),
   };
 }
  

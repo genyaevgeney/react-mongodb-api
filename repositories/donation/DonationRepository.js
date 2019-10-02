@@ -7,6 +7,13 @@ class DonationRepository extends BaseRepository {
 		this.model = Donation;
 	}
 
+	isEmptyObj(obj) {
+    for (let key in obj) {
+      return false;
+    }
+    return true;
+  }
+
 	getCollectionCount(perPage) {
 		return this.model.estimatedDocumentCount()
 	}
@@ -62,6 +69,11 @@ class DonationRepository extends BaseRepository {
 				{ $match : { $and : [ {date: { $gte: startDate, $lt: endDate } }] }},
 				{ $group : { _id : null, amount : { $sum : "$amount"}}}
 				]).exec((err, doc) => {
+					if(this.isEmptyObj(doc)) {
+						const amount = 0
+						resolve(amount)
+						return
+					}
 					resolve(doc[0].amount)
 				})
 			});

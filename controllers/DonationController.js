@@ -8,3 +8,8 @@ exports.renderDashboardPage = async (req, res) => {
   const data = await donationService.getPaginationPageData(req.params.page);
   res.send(data);
 };
+
+exports.renderErrorPage = async (req, res) => {
+  const data = await donationService.getErrorPageData();
+  res.send(data);
+};

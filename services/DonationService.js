@@ -23,8 +23,7 @@ class DonationService {
     const endDate = new Date(year, month, date)
     const amountForThisMonth = await donationRepository.getAmountForThisMonth(startDate, endDate)
 
-    return [
-    {
+    return {
       donations: await donationRepository.getPaginationPageData(perPage, page),
       current: page,
       paginationPages: paginationPages,
@@ -34,7 +33,6 @@ class DonationService {
       amountForThisMonth: amountForThisMonth,
       dataForChart: await donationRepository.getChartInfo()
     }
-    ];
   }
 
   async setPostData(bodyData) {

@@ -1,6 +1,7 @@
 const donationService = require("../services/DonationService.js");
 
 exports.receivingDonationData = (req, res) => {
+	// console.log(req.body)
   donationService.setPostData(req.body);
 };
 

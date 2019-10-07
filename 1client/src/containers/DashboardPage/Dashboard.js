@@ -1,50 +1,78 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-
+import { Redirect, Link } from 'react-router';
 import { getTracks } from '../../actions/tracks';
 import '../../assets/scss/DashboardPage.css';
 import Header from '../../components/DashboardPage/Header';
 import BlockInfo from '../../components/DashboardPage/BlockInfo';
+import Chart from '../../components/DashboardPage/Chart';
 import DonationService from "../../services/DonationService";
 
 
-const Dashboard = ({paginationData, tracks, onAddTrack, onFindTrack, onGetTracks, ownProps, getApiData }) => {
-  
-  console.log('ownProps', ownProps);
-  let trackInput = '';
-  let searchInput = '';
-  const name = 'Test';
+class Dashboard extends React.Component {
+  // constructor() {
+  //   super()
+  //   this.state = false
+  // }
 
-  // useEffect(() => {
-  //     getApiData(ownProps.params.id)
-  //   });
-
-useEffect(() => getApiData(ownProps.params.id), [])
-
-  const addTrack = () => {
-      console.log('addTrack', trackInput.value);
-      onAddTrack(trackInput.value);
-      trackInput.value = '';
+  redirectToErrorPage() {
+      return "hi"
   }
 
-  const findTrack = () => {
-    console.log('findTrack', searchInput.value);
-    onFindTrack(searchInput.value);
-  }
-  const showPage = () => {
-    if (paginationData[0] === undefined) return <h1>Loading data</h1>
-      return (
-              <div>
-              <Header/>
-              <BlockInfo paginationData={paginationData}/>
-              </div>
-        )
+  test() {
   }
 
-  return (
-    showPage()
-  );
+  componentDidUpdate(prevProps) {
+    this.props.paginationData[0] = undefined
+    this.isNewRequest = true
+    if (this.props.ownProps.params.id !== prevProps.ownProps.params.id) {
+        this.props.getApiData(this.props.ownProps.params.id)
+        console.log("update")
+    }
+  }
+
+  componentDidMount() {
+    this.props.getApiData(this.props.ownProps.params.id)
+    console.log("mount")
+  }
+
+  getBlockInfoData() {
+
+    const blockInfoData = [["Top Donator", this.props.paginationData[0].maxAmount, this.props.paginationData[0].topDonator],["Last Month Amount", this.props.paginationData[0].amountForThisMonth], ["All time amount", this.props.paginationData[0].amount]]
+    return blockInfoData
+  }
+
+
+  // showPage() {
+  //   if (paginationData[0] === undefined) return <h1>Loading data</h1>
+  //     console.log(paginationData[0])
+  //     return (
+  //             <div>
+  //             <Header/>
+  //             <BlockInfo paginationData={paginationData}/>
+  //             </div>
+  //       )
+  // }
+
+  render() {
+    // console.log(this.props.paginationData)
+    // console.log(this.props.paginationData[0])
+    // if (this.isNewRequest) return "load data"
+      // console.log(this.props.paginationData[0])
+      // if (this.props.paginationData[0].badRequest) this.props.ownProps.router.push("/error")
+      if (this.props.paginationData[0] === undefined) {
+        console.log("load data")
+        return "load data"
+      }
+      if (this.props.paginationData[0].badRequest) this.props.ownProps.router.push("/error")
+        return (
+          <div>
+          <Header/>
+          <BlockInfo blockInfoData={this.getBlockInfoData()}/>
+          <Chart chartData={this.props.paginationData[0]}/>
+          </div>
+          )
+  }
 }
 
 export default connect(

@@ -7,13 +7,13 @@ class DonationService {
     const page = reqPage || 1
     const badRequest = true
 
-    if (page < 1) return [{ badRequest: badRequest }]
+    if (page < 1) return { badRequest: badRequest }
 
       const currentPage = Number(reqPage)
     const collectionCount = await donationRepository.getCollectionCount()
     let paginationPages = Math.ceil(collectionCount / perPage);
 
-    if (isNaN(currentPage) || currentPage > paginationPages) return [{ badRequest: badRequest }];
+    if (isNaN(currentPage) || currentPage > paginationPages) return { badRequest: badRequest };
 
     const maxAmount = await donationRepository.getMaxAmount();
     const year = new Date().getFullYear()
@@ -36,14 +36,20 @@ class DonationService {
   }
 
   async setPostData(bodyData) {
-    const postData = {
-      volunteerName : bodyData.volunteerName,
-      email : bodyData.email,
-      amount : +bodyData.amount,
-      message : bodyData.message,
-      date : new Date()
+
+     const data = JSON.parse(Object.keys(bodyData));
+    if (!data.name || !data.email || !data.amount || !data.message) {
+      console.log("All form fields must be filled");
+    } else {
+      const donationInfo = {
+          volunteerName: data.name,
+          email: data.email,
+          amount: +data.amount,
+          message: data.message,
+          date: new Date()
+        }
+      donationRepository.create(donationInfo);
     }
-    donationRepository.create(postData)
   }
 
   async getErrorPageData(bodyData) {

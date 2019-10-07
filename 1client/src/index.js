@@ -8,6 +8,7 @@ import { Router, Route, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import Dashboard from './containers/DashboardPage/Dashboard';
+import Donate from './containers/DonatePage/Donate';
 import './assets/scss/bootstrap.min.css';
 import reducer from './reducers';
 import ErrorPage from './components/ErrorPage/ErrorPage';
@@ -21,6 +22,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/page=:id" component={Dashboard}/>
+      <Route path="/donation" component={Donate}/>
       <Route path="*" component={ErrorPage}/>
     </Router>
   </Provider>,

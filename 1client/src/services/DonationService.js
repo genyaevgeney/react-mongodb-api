@@ -2,11 +2,11 @@ import api from "./api";
 
 export default {
   fetchPageData(id) {
-    return api().get(`page=${id}`);
+    return api().get(`page=${id}`)
   },
   postData(data) {
     api()
-      .post("/toDonate", data)
+      .post("/donation", data)
       .then(function(response) {
         console.log(response);
       })

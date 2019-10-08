@@ -6,6 +6,7 @@ import '../../assets/scss/DashboardPage.css';
 import Header from '../../components/DashboardPage/Header';
 import BlockInfo from '../../components/DashboardPage/BlockInfo';
 import Chart from '../../components/DashboardPage/Chart';
+import Pagination from '../../components/DashboardPage/Pagination';
 import DonationService from "../../services/DonationService";
 
 
@@ -65,11 +66,13 @@ class Dashboard extends React.Component {
         return "load data"
       }
       if (this.props.paginationData[0].badRequest) this.props.ownProps.router.push("/error")
+        console.log(this.props.paginationData[0])
         return (
           <div>
           <Header/>
           <BlockInfo blockInfoData={this.getBlockInfoData()}/>
           <Chart chartData={this.props.paginationData[0]}/>
+          <Pagination donations={this.props.paginationData[0].donations} paginationPages={this.props.paginationData[0].paginationPages} current={this.props.paginationData[0].current}/>
           </div>
           )
   }

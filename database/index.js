@@ -12,12 +12,6 @@ mongoose
 	console.log(`DB Connection Error: ${err.message}`);
 	});
 
-const UserSchema = new mongoose.Schema({
-  login: String,
-  email: String,
-  password: String
-});
-
 const DonationSchema = new mongoose.Schema({
   volunteerName: String,
   email: String,
@@ -26,6 +20,23 @@ const DonationSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now}
+});
+
+// User.js
+
+const UserSchema = new mongoose.Schema({
+    login: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
 });
 
 exports.donationModel = mongoose.model('donation', DonationSchema);

@@ -9,14 +9,13 @@ module.exports = class BaseRepository {
   }
 
   create(data) {
-    const donationModel = new this.model(data)
-    donationModel.save()
-    .then(function(doc){
-      console.log("Saved item", doc);
-    })
-    .catch(function (err){
-      console.log("Error");
-      console.log(err);
+    return new Promise((resolve, reject) => {
+    const model = new this.model(data)
+    model.save()
+    .then(user => {
+      resolve(user)
     });
-  }
+  })
+}
+
 };

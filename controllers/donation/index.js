@@ -1,4 +1,4 @@
-const donationService = require("../services/DonationService.js");
+const donationService = require("../../services/donation");
 
 exports.receivingDonationData = (req, res) => {
 	// console.log(req.body)

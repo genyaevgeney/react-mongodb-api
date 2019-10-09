@@ -1,4 +1,4 @@
-const donationRepository = require("../repositories/donation/DonationRepository.js");
+const donationRepository = require("../../repositories/donation/DonationRepository.js");
 
 class DonationService {
 
@@ -48,6 +48,7 @@ class DonationService {
           message: data.message,
           date: new Date()
         }
+        console.log(donationInfo)
       donationRepository.create(donationInfo);
     }
   }

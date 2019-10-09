@@ -6,7 +6,9 @@ const db = require('./database').connection
 const passport = require('passport');
 
 exports.router = express.Router();
-const router = require('./router/Router')
+const userRouter = require('./router/user')
+const donationRouter = require('./router/donation')
+
 
 exports.configure = async () => {
 	app.use(passport.initialize());
@@ -22,7 +24,8 @@ exports.configure = async () => {
 	})
 	app.use(bodyParser.urlencoded({ extended: false }))
 	app.use(bodyParser.json())
-	app.use('/', router)
+	app.use('/', userRouter)
+	app.use('/', donationRouter)
 	db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 }
 

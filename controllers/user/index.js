@@ -4,17 +4,22 @@ const validateLoginInput = require('../../validation/login');
 
 
 exports.register = async (req, res) => {
+    console.log(req.body)
     const { errors, isValid } = validateRegisterInput(req.body);
+    console.log(isValid)
 
     if(!isValid) {
         return res.status(400).json(errors);
+        console.log(errors)
     }
 
 	const processingResult = await userService.register(req.body)
 	if (processingResult.status === 400) {
         return res.status(processingResult.status).json(processingResult.data);
+        console.log(processingResult.data)
     }
     res.json(processingResult.data)
+    console.log(processingResult.data)
 };
 
 exports.login = async (req, res) => {

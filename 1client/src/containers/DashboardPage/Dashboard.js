@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router';
 import { getTracks } from '../../actions/tracks';
 import '../../assets/scss/DashboardPage.css';
-import Header from '../../components/DashboardPage/Header';
+import Navbar from '../../components/Navbar';
+// import Header from '../../components/DashboardPage/Header';
 import BlockInfo from '../../components/DashboardPage/BlockInfo';
 import Chart from '../../components/DashboardPage/Chart';
 import Pagination from '../../components/DashboardPage/Pagination';
@@ -69,7 +70,7 @@ class Dashboard extends React.Component {
         console.log(this.props.paginationData[0])
         return (
           <div>
-          <Header/>
+          <Navbar router={this.props.ownProps.router}/>
           <BlockInfo blockInfoData={this.getBlockInfoData()}/>
           <Chart chartData={this.props.paginationData[0]}/>
           <Pagination donations={this.props.paginationData[0].donations} paginationPages={this.props.paginationData[0].paginationPages} current={this.props.paginationData[0].current}/>

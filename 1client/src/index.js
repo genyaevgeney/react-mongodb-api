@@ -15,14 +15,41 @@ import ErrorPage from './components/ErrorPage/ErrorPage';
 // import About from './About';
 // import Track from './Track';
 
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
+import jwt_decode from 'jwt-decode';
+import setAuthToken from './setAuthToken';
+import { setCurrentUser, logoutUser } from './actions/authentication';
+
+
+import Register from './components/Register';
+import Login from './components/Login';
+import Home from './components/Home';
+
+
+const inititalState = {};
+
+const store = createStore(reducer, inititalState, composeWithDevTools(applyMiddleware(thunk)));
 const history = syncHistoryWithStore(hashHistory, store);
+
+if(localStorage.jwtToken) {
+  setAuthToken(localStorage.jwtToken);
+  const decoded = jwt_decode(localStorage.jwtToken);
+  store.dispatch(setCurrentUser(decoded));
+
+  const currentTime = Date.now() / 1000;
+  if(decoded.exp < currentTime) {
+    store.dispatch(logoutUser());
+    window.location.href = '/login'
+  }
+}
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/page=:id" component={Dashboard}/>
       <Route path="/donation" component={Donate}/>
+      <Route exact path="/" component={ Home } />
+      <Route exact path="/register" component={ Register } />
+      <Route exact path="/login" component={ Login } />
       <Route path="*" component={ErrorPage}/>
     </Router>
   </Provider>,

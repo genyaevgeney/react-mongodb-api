@@ -36,6 +36,7 @@ class DonationService {
   }
 
   async setPostData(bodyData) {
+    // console.log(bodyData)
 
      const data = JSON.parse(Object.keys(bodyData));
     if (!data.name || !data.email || !data.amount || !data.message) {

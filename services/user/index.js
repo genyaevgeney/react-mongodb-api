@@ -17,7 +17,7 @@ class UserService {
     }
 
     const userData = {
-        login: bodyData.login,
+        login: bodyData.name,
         email: bodyData.email,
         password: bodyData.password
 
@@ -38,7 +38,9 @@ class UserService {
 
     return {
         status: 200,
-        data: "Success registration"
+        data: {
+            isSuccessRegistration: true
+        }
     }
 }
 

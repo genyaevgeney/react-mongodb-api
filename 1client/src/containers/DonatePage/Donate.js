@@ -1,8 +1,9 @@
 import React from 'react';
-import Header from '../../components/DashboardPage/Header';
+// import Header from '../../components/DashboardPage/Header';
 import '../../assets/scss/DonatePage.css';
 import DonationService from "../../services/DonationService";
 import { connect } from 'react-redux';
+import Navbar from '../../components/Navbar';
 
 class DonatePage extends React.Component  {
 
@@ -23,14 +24,22 @@ class DonatePage extends React.Component  {
 			message: this.messageInput.value
 		});
 		DonationService.postData(strData);
+
 		this.props.ownProps.router.push("/page=1")
 	}
 
+	// componentDidMount() {
+ //        if(!this.props.auth.isAuthenticated) {
+ //            this.props.ownProps.router.push('/');
+ //        }
+ //    }
+
 	
 	render() {
+		console.log(this.props.ownProps)
 		return (
 			<div>
-			<Header/>
+			<Navbar router={this.props.ownProps.router}/>
 			<div className="container">
 			<div className="row Donating__main-row justify-content-center align-items-center">
 			<div className="col-6">
@@ -62,4 +71,4 @@ class DonatePage extends React.Component  {
 	}
 }
 
-export default connect((state, ownProps) => ({ownProps}))(DonatePage);
+export default connect((state, ownProps) => ({auth: state.auth, ownProps}))(DonatePage);

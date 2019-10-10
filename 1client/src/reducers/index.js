@@ -6,10 +6,15 @@ import playlists from './playlists';
 import filterTracks from './filterTracks';
 import donations from './donations';
 
+import errorReducer from './errorReducer';
+import authReducer from './authReducer';
+
 export default combineReducers({
-  routing: routerReducer,
-  tracks,
-  playlists,
-  filterTracks,
-  donations
+	errors: errorReducer,
+	auth: authReducer,
+	routing: routerReducer,
+	tracks,
+	playlists,
+	filterTracks,
+	donations
 });

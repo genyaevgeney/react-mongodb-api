@@ -1,5 +1,6 @@
 const Validator = require('validator');
 const isEmpty = require('./is-empty');
+const zxcvbn = require('zxcvbn');
 
 module.exports = function validateRegisterInput(data) {
     let errors = {};
@@ -7,6 +8,7 @@ module.exports = function validateRegisterInput(data) {
     data.email = !isEmpty(data.email) ? data.email : '';
     data.password = !isEmpty(data.password) ? data.password : '';
     data.password_confirm = !isEmpty(data.password_confirm) ? data.password_confirm : '';
+    const evaluation = zxcvbn(data.password)
 
     if(!Validator.isLength(data.name, { min: 2, max: 30 })) {
         errors.name = 'Name must be between 2 to 30 chars';
@@ -30,6 +32,10 @@ module.exports = function validateRegisterInput(data) {
 
     if(Validator.isEmpty(data.password)) {
         errors.password = 'Password is required';
+    }
+
+    if(!isEmpty(evaluation.feedback.suggestions)) {
+        errors.password = evaluation.feedback.suggestions
     }
 
     if(!Validator.isLength(data.password_confirm, {min: 6, max: 30})) {

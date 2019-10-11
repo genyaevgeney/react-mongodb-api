@@ -5,6 +5,9 @@ export default {
   fetchPageData(id) {
     return api().get(`page=${id}`)
   },
+  fetchUserPageData(id, login) {
+    return api().get(`userdashboard/${id}/${login}`)
+  },
   postData(data) {
     delete axios.defaults.headers.common['Authorization'];
     api()

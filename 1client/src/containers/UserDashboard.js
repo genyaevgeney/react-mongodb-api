@@ -1,31 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import '../../assets/scss/DashboardPage.css';
-import Navbar from '../../components/Navbar';
-import BlockInfo from '../../components/DashboardPage/BlockInfo';
-import Chart from '../../components/DashboardPage/Chart';
-import Pagination from '../../components/DashboardPage/Pagination';
-import DonationService from "../../services/DonationService";
+import '../assets/scss/DashboardPage.css';
+import Navbar from '../components/Navbar';
+import BlockInfo from '../components/DashboardPage/BlockInfo';
+import Chart from '../components/DashboardPage/Chart';
+import Pagination from '../components/DashboardPage/Pagination';
+import DonationService from "../services/DonationService";
 
 
-class Dashboard extends React.Component {
+class UserDashboard extends React.Component {
 
   componentDidUpdate(prevProps) {
-    this.props.paginationData[0] = undefined
-    this.isNewRequest = true
+   this.props.paginationData[0] = undefined
     if (this.props.ownProps.params.id !== prevProps.ownProps.params.id) {
-        this.props.getApiData(this.props.ownProps.params.id)
+        this.props.getApiData(this.props.ownProps.params.id, this.props.auth.user.login)
         console.log("update")
     }
   }
 
   componentDidMount() {
-    this.props.getApiData(this.props.ownProps.params.id)
+    if(!this.props.auth.isAuthenticated) {
+            this.props.ownProps.router.push('/');
+            return
+        }
+    this.props.getApiData(this.props.ownProps.params.id, this.props.auth.user.login)
     console.log("mount")
   }
 
   getBlockInfoData() {
-    const blockInfoData = [["Top Donator", this.props.paginationData[0].maxAmount, this.props.paginationData[0].topDonator],["Last Month Amount", this.props.paginationData[0].amountForThisMonth], ["All time amount", this.props.paginationData[0].amount]]
+    const blockInfoData = [["Best Donation", this.props.paginationData[0].maxAmount],["Last Month Amount", this.props.paginationData[0].amountForThisMonth], ["All time amount", this.props.paginationData[0].amount]]
     return blockInfoData
   }
 
@@ -38,7 +41,7 @@ class Dashboard extends React.Component {
         return (
           <div>
           <Navbar router={this.props.ownProps.router}/>
-          <h1>No one has donated yet, so the statistics are not available.</h1>
+          <h1>You haven't donated yet, so no statistics are available.</h1>
           </div>
           )
       }
@@ -48,7 +51,7 @@ class Dashboard extends React.Component {
       }
         console.log(this.props.paginationData[0])
         return (
-          <div>
+         <div>
           <Navbar router={this.props.ownProps.router}/>
           <BlockInfo blockInfoData={this.getBlockInfoData()}/>
           <Chart chartData={this.props.paginationData[0].dataForChart}/>
@@ -61,12 +64,13 @@ class Dashboard extends React.Component {
 export default connect(
   (state, ownProps) => ({
     ownProps,
-    paginationData: state.donations
+    paginationData: state.userDonations,
+    auth: state.auth
   }),
   dispatch => ({
-    getApiData: async (paramsId) => {
-      const { data } = await DonationService.fetchPageData(paramsId);
-      dispatch({ type: 'GET_API', data});
+    getApiData: async (paramsId, login) => {
+      const { data } = await DonationService.fetchUserPageData(paramsId, login);
+      dispatch({ type: 'GET_API_USER', data});
     }
   })
-)(Dashboard);
+)(UserDashboard);

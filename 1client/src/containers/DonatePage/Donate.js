@@ -1,5 +1,4 @@
 import React from 'react';
-// import Header from '../../components/DashboardPage/Header';
 import '../../assets/scss/DonatePage.css';
 import DonationService from "../../services/DonationService";
 import { connect } from 'react-redux';
@@ -16,9 +15,15 @@ class DonatePage extends React.Component  {
 
 	}
 
+	componentDidMount() {
+        if(!this.props.auth.isAuthenticated) {
+            this.props.ownProps.router.push('/');
+        }
+    }
+
 	postData() {
 		const strData = JSON.stringify({
-			name: this.nameInput.value,
+			name: this.props.auth.user.login,
 			email: this.emailInput.value,
 			amount: this.amountInput.value,
 			message: this.messageInput.value
@@ -28,15 +33,7 @@ class DonatePage extends React.Component  {
 		this.props.ownProps.router.push("/page=1")
 	}
 
-	// componentDidMount() {
- //        if(!this.props.auth.isAuthenticated) {
- //            this.props.ownProps.router.push('/');
- //        }
- //    }
-
-	
 	render() {
-		console.log(this.props.ownProps)
 		return (
 			<div>
 			<Navbar router={this.props.ownProps.router}/>
@@ -45,10 +42,6 @@ class DonatePage extends React.Component  {
 			<div className="col-6">
 			<h1 className="Donating__headline-of-page">Donate</h1>
 			<form className="Donating__form">
-			<label>
-			Name
-			<input ref={(input) => { this.nameInput = input }} name="name" type="text" className="Donating__input-name" required/>
-			</label>
 			<label>
 			Email
 			<input ref={(input) => { this.emailInput = input }} name="email" type="email" className="Donating__input-email" pattern=".+@globex.com" required/>

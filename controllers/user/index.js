@@ -3,10 +3,11 @@ const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 
 
+
 exports.register = async (req, res) => {
     console.log(req.body)
     const { errors, isValid } = validateRegisterInput(req.body);
-    console.log(isValid)
+    
 
     if(!isValid) {
         return res.status(400).json(errors);

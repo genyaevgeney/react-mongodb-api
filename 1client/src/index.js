@@ -4,22 +4,17 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import { Router, Route, hashHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-
 import Dashboard from './containers/DashboardPage/Dashboard';
 import Donate from './containers/DonatePage/Donate';
 import './assets/scss/bootstrap.min.css';
 import reducer from './reducers';
 import ErrorPage from './components/ErrorPage/ErrorPage';
-// import About from './About';
-// import Track from './Track';
-
+import UserDashboard from './containers/UserDashboard';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authentication';
-
-
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
@@ -28,7 +23,7 @@ import Home from './components/Home';
 const inititalState = {};
 
 const store = createStore(reducer, inititalState, composeWithDevTools(applyMiddleware(thunk)));
-const history = syncHistoryWithStore(hashHistory, store);
+const history = syncHistoryWithStore(browserHistory, store);
 
 if(localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -47,6 +42,7 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/page=:id" component={Dashboard}/>
       <Route path="/donation" component={Donate}/>
+      <Route exact path="/userdashboard/:id" component={ UserDashboard } />
       <Route exact path="/" component={ Home } />
       <Route exact path="/register" component={ Register } />
       <Route exact path="/login" component={ Login } />

@@ -34,9 +34,7 @@ class Register extends Component {
             password: this.state.password,
             password_confirm: this.state.password_confirm
         }
-        // this.props.registerUser(user, this.props.ownProps.router);
         let { data } = await this.props.registerUser(user);
-        // console.log(data)
         if(data.isSuccessRegistration) this.props.loginUser(user)
     }
 

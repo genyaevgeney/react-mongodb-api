@@ -10,6 +10,11 @@ exports.renderDashboardPage = async (req, res) => {
   res.send(data);
 };
 
+exports.renderUserDashboardPage = async (req, res) => {
+  const data = await donationService.getUserPaginationPageData(req.params.id, req.params.login);
+  res.send(data);
+};
+
 exports.renderErrorPage = async (req, res) => {
   const data = await donationService.getErrorPageData();
   res.send(data);

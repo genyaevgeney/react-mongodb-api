@@ -19,15 +19,20 @@ class Pagination extends React.Component  {
 	}
 
 	createPaginationNav () {
-			if (this.props.paginationPages > 0) {
+		console.log(this.props.paginationPages)
+			if (this.props.paginationPages > 1) {
 				let paginationNav = []
 				let paginationNavItem = []
 
 				if (this.props.current == 1) {
 					paginationNavItem.push(<li className="disabled"><Link>First</Link></li>)
 				} else {
-
-					paginationNavItem.push(<li><Link to="/page=1">First</Link></li>)
+					if (this.props.paginationType === "allDonations") {
+						paginationNavItem.push(<li><Link to="/page=1">First</Link></li>)
+					}
+					if (this.props.paginationType === "userDonations") {
+						paginationNavItem.push(<li><Link to="/userdashboard/1">First</Link></li>)
+					}
 				}
 				let i = (Number(this.props.current) > 5 ? Number(this.props.current) - 4 : 1)
 				if (i !== 1) { 
@@ -37,7 +42,12 @@ class Pagination extends React.Component  {
 				if (i == this.props.current) {
 					paginationNavItem.push(<li className="active"><Link>{i}</Link></li>)
 				} else {
+					if (this.props.paginationType === "allDonations") {
 					paginationNavItem.push(<li><Link to={`page=${i}`}>{i}</Link></li>)
+				}
+				if (this.props.paginationType === "userDonations") {
+					paginationNavItem.push(<li><Link to={`userdashboard/${i}`}>{i}</Link></li>)
+				}
 				}
 				if (i == Number(this.props.current) + 4 && i < this.props.paginationPages) {
 					paginationNavItem.push(<li className="disabled"><Link>...</Link></li>)
@@ -46,7 +56,12 @@ class Pagination extends React.Component  {
 				if (this.props.current == this.props.paginationPages) {
 					paginationNavItem.push(<li className="disabled"><Link>Last</Link></li>)
 				} else {
+					if (this.props.paginationType === "allDonations") {
 					paginationNavItem.push(<li><Link to={`page=${this.props.paginationPages}`}>Last</Link></li>)
+				}
+				if (this.props.paginationType === "userDonations") {
+					paginationNavItem.push(<li><Link to={`userdashboard/${this.props.paginationPages}`}>Last</Link></li>)
+				}
 				}
 			paginationNav.push(<ul className="pagination text-center">{paginationNavItem}</ul>)
 			return paginationNav
@@ -54,7 +69,7 @@ class Pagination extends React.Component  {
 	}
 
 	render() {
-		console.log(this.props.donations)
+		console.log(this.props.paginationType)
 		return (
 			<div className="container-fluid Dashboard-pagination">
 			<div className="Donating__main-info">

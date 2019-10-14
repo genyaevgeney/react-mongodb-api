@@ -36,7 +36,15 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    resetPasswordToken: {
+        type: String,
+        required: true
+    },
+    resetPasswordExpires: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 exports.donationModel = mongoose.model('donation', DonationSchema);

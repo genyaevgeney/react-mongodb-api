@@ -16,7 +16,14 @@ class BlockInfo extends React.Component  {
 				blockChilds.push(<p className="Donating__block-price">{this.props.blockInfoData[i][1]}</p>)
 			}
 
-			infoBlocks.push(<div className="Donating__information-block first-block">{blockChilds}</div>)
+			if (this.props.page === "user") {
+				infoBlocks.push(<div className="Donating__information-block user-block">{blockChilds}</div>)
+			}
+
+			if (this.props.page === "all") {
+				infoBlocks.push(<div className="Donating__information-block all-block">{blockChilds}</div>)
+			}
+
 			row.push(<div className="col-4">{infoBlocks}</div>)
 		}
 		return row

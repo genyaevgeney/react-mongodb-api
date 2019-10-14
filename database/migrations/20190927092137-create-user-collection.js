@@ -7,6 +7,8 @@ const createCollection = async (db) => {
         { login: { $type: 'string' } },
         { email: { $type: 'string' } },
         { password: { $type: 'string' } },
+        { resetPasswordToken: { $type: 'string' } },
+        { resetPasswordExpires: { $type: 'date' } },
       ],
     },
     validationAction: 'error',

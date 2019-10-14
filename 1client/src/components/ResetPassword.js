@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loginUser } from '../actions/authentication';
+import PropTypes from 'prop-types';
+import { resetPassword } from '../actions/authentication';
 import classnames from 'classnames';
 import Navbar from './Navbar';
 
-class Login extends Component {
+class ResetPassword extends Component {
 
     constructor() {
         super();
         this.state = {
             email: '',
-            password: '',
             errors: {}
         }
+
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -24,25 +24,18 @@ class Login extends Component {
         })
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
-        const user = {
-            email: this.state.email,
-            password: this.state.password,
+        const data = {
+            email: this.state.email
         }
-        this.props.loginUser(user);
-    }
+        const isSuccessSendingMail = await this.props.resetPassword(data);
+        console.log(isSuccessSendingMail)
+        if(isSuccessSendingMail) this.props.ownProps.router.push('/login')
 
-    componentDidMount() {
-        if(this.props.auth.isAuthenticated) {
-            this.props.ownProps.router.push('/userdashboard/1');
-        }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.auth.isAuthenticated) {
-            this.props.ownProps.router.push('/userdashboard/1')
-        }
         if(nextProps.errors) {
             this.setState({
                 errors: nextProps.errors
@@ -51,12 +44,12 @@ class Login extends Component {
     }
 
     render() {
-        const {errors} = this.state;
+        const { errors } = this.state;
         return(
             <div>
-            <Navbar />
+            <Navbar/>
         <div className="container" style={{ marginTop: '50px', width: '700px'}}>
-            <h2 style={{marginBottom: '40px'}}>Login</h2>
+            <h2 style={{marginBottom: '40px'}}>Reset password</h2>
             <form onSubmit={ this.handleSubmit }>
                 <div className="form-group">
                     <input
@@ -72,21 +65,8 @@ class Login extends Component {
                     {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
                 </div>
                 <div className="form-group">
-                    <input
-                    type="password"
-                    placeholder="Password"
-                    className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.password
-                    })} 
-                    name="password"
-                    onChange={ this.handleInputChange }
-                    value={ this.state.password }
-                    />
-                    {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
-                </div>
-                <div className="form-group">
                     <button type="submit" className="btn btn-primary">
-                        Login User
+                        Reset Password
                     </button>
                 </div>
             </form>
@@ -96,16 +76,16 @@ class Login extends Component {
     }
 }
 
-Login.propTypes = {
-    loginUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
-}
+ResetPassword.propTypes = {
+    resetPassword: PropTypes.func.isRequired,
+    registerUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
+};
 
 const mapStateToProps = (state, ownProps) => ({
     auth: state.auth,
     errors: state.errors,
     ownProps
-})
+});
 
-export  default connect(mapStateToProps, { loginUser })(Login)
+export default connect(mapStateToProps,{ resetPassword })(ResetPassword)

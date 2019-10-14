@@ -42,16 +42,12 @@
   margin-bottom: 6px;
 }
 
-.Donating__information-block.first-block {
-  background-color: #4caf50;
+.Donating__information-block.user-block {
+  background-color: #2D2D2D;
 }
 
-.Donating__information-block.second-block {
-  background-color: #9c27b0;
-}
-
-.Donating__information-block.third-block {
-  background-color: #607d8b;
+.Donating__information-block.all-block {
+  background-color: #9DA24D;
 }
 
 .Donating__block-headline,

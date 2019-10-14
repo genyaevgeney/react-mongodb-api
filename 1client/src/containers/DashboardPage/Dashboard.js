@@ -38,7 +38,10 @@ class Dashboard extends React.Component {
         return (
           <div>
           <Navbar router={this.props.ownProps.router}/>
-          <h1>No one has donated yet, so the statistics are not available.</h1>
+           <div class="alert alert-info alert-dismissible fade show">
+      <strong>Info!</strong> No one has donated yet, so the statistics are not available.
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>
           </div>
           )
       }
@@ -50,7 +53,7 @@ class Dashboard extends React.Component {
         return (
           <div>
           <Navbar router={this.props.ownProps.router}/>
-          <BlockInfo blockInfoData={this.getBlockInfoData()}/>
+          <BlockInfo blockInfoData={this.getBlockInfoData()} page={"all"}/>
           <Chart chartData={this.props.paginationData[0].dataForChart}/>
           <Pagination perPage={this.props.paginationData[0].perPage} collectionCount={this.props.paginationData[0].collectionCount} donations={this.props.paginationData[0].donations} paginationPages={this.props.paginationData[0].paginationPages} current={this.props.paginationData[0].current} paginationType={this.props.paginationData[0].paginationType}/>
           </div>

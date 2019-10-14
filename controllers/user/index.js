@@ -1,6 +1,8 @@
 const userService = require("../../services/user");
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
+const validateResetPassword = require('../../validation/reset-password');
+
 
 
 
@@ -36,6 +38,23 @@ exports.login = async (req, res) => {
     }
 
     if (processingResult.status === 400) {
+        return res.status(processingResult.status).json(processingResult.data);
+    }
+
+    res.json(processingResult.data)
+
+}
+
+exports.forgotPassword = async (req, res) => {
+
+    const { errors, isValid } = validateResetPassword(req.body);
+
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    const processingResult = await userService.forgotPassword(req.body)
+    if (processingResult.status === 404) {
         return res.status(processingResult.status).json(processingResult.data);
     }
 

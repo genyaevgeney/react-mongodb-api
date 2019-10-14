@@ -48,6 +48,9 @@ class Navbar extends Component {
         </li>
         </ul>
         <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+                <Link className="nav-link" to="/reset-password">Reset Password</Link>
+            </li>
             <li className="nav-item">
                 <Link className="nav-link" to="/register">Sign Up</Link>
             </li>

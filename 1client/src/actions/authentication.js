@@ -23,6 +23,20 @@ export const registerUser = (user) => dispatch => {
 
 }
 
+export const resetPassword = (data) => dispatch => {
+    return new Promise((resolve, reject) => {
+    axios.post('http://react-mongodb-api.com/forgotPassword', data)
+            .then(res => resolve(res.data.isSuccessSendingMail))
+            .catch(err => {
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: err.response.data
+                });
+            });
+            })
+
+}
+
 export const loginUser = (user) => dispatch => {
     axios.post('http://react-mongodb-api.com/login', user)
             .then(res => {

@@ -40,7 +40,7 @@ class Register extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.auth.isAuthenticated) {
-            this.props.ownProps.router.push('/')
+            this.props.ownProps.router.push('/userdashboard/1')
         }
         if(nextProps.errors) {
             this.setState({
@@ -51,7 +51,7 @@ class Register extends Component {
 
     componentDidMount() {
         if(this.props.auth.isAuthenticated) {
-            this.props.ownProps.router.push('/');
+            this.props.ownProps.router.push('/userdashboard/1');
         }
     }
 

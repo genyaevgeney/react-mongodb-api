@@ -18,4 +18,22 @@ module.exports = class BaseRepository {
   })
 }
 
+find(dataObj) {
+  return new Promise((resolve, reject) => {
+      this.model.findOne(dataObj).then(user => {
+        resolve(user)
+      })
+    })
+}
+
+update(objForFind, dataObj) {
+    this.model.findOneAndUpdate(objForFind, dataObj, {new: true}, (err, doc) => {
+    if (err) {
+        console.log("Something wrong when updating data!");
+    }
+
+    console.log(doc);
+});
+  }
+
 };

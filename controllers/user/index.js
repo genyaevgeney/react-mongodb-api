@@ -2,6 +2,7 @@ const userService = require("../../services/user");
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 const validateResetPassword = require('../../validation/reset-password');
+const validateUpdatePassword = require('../../validation/update-password');
 
 
 
@@ -60,6 +61,40 @@ exports.forgotPassword = async (req, res) => {
 
     res.json(processingResult.data)
 
+}
+
+exports.updatePasswordViaEmail = async (req, res) => {
+    const dataObj = {
+        login: req.body.login,
+        resetPasswordToken: req.body.resetPasswordToken,
+        resetPasswordExpires: {
+        $gte: Date.now()
+    }
+      }
+      const password = req.body.password
+      const { errors, isValid } = validateUpdatePassword(password);
+
+    if(!isValid) {
+        return res.status(400).json("Passvord is not valid");
+    }
+
+      
+
+      const processingResult = await userService.updatePasswordViaEmail(dataObj, password)
+
+      if (processingResult.status !== 200) {
+        return res.status(processingResult.status).json(processingResult.data);
+    }
+    res.json(processingResult.data)
+  }
+
+exports.resetPassword = async (req, res) => {
+    console.log(req.query.resetPasswordToken)
+    const processingResult = await userService.resetPassword(req.query.resetPasswordToken)
+    if (processingResult.status === 403) {
+        return res.status(processingResult.status).json(processingResult.data);
+    }
+    res.json(processingResult.data)
 }
 
 exports.authenticate = (req, res) => {

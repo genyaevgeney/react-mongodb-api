@@ -7,25 +7,15 @@ class UserRepository extends BaseRepository {
 		this.model = User;
 	}
 
-	findByEmail(reqEmail) {
-		return new Promise((resolve, reject) => {
-			this.model.findOne({
-				email: reqEmail
-			}).then(user => {
-				resolve(user)
-			})
-		})
-	}
-
-	updatePasswordToken(login, token, passwordExpires) {
-		this.model.findOneAndUpdate(login, {$set:{resetPasswordToken: token, resetPasswordExpires: passwordExpires }}, {new: true}, (err, doc) => {
-    if (err) {
-        console.log("Something wrong when updating data!");
-    }
-
-    console.log(doc);
-});
-	}
+	// findByEmail(reqEmail) {
+	// 	return new Promise((resolve, reject) => {
+	// 		this.model.findOne({
+	// 			email: reqEmail
+	// 		}).then(user => {
+	// 			resolve(user)
+	// 		})
+	// 	})
+	// }
 }
 
 	module.exports = new UserRepository();

@@ -18,6 +18,7 @@ import { setCurrentUser, logoutUser } from './actions/authentication';
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
+import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 
 
@@ -47,7 +48,8 @@ ReactDOM.render(
       <Route exact path="/" component={ Home } />
       <Route exact path="/register" component={ Register } />
       <Route exact path="/login" component={ Login } />
-      <Route exact path="/reset-password" component={ ResetPassword } />
+      <Route exact path="/reset-password" component={ ForgotPassword } />
+      <Route exact path="/reset/:token" component={ ResetPassword } />
       <Route path="*" component={ErrorPage}/>
     </Router>
   </Provider>,

@@ -8,7 +8,10 @@ const crypto = require('crypto');
 class UserService {
 
   async register(bodyData) {
-    const user = await userRepository.findByEmail(bodyData.email)
+    const dataObj = {
+             email: bodyData.email
+         }
+    const user = await userRepository.find(dataObj)
     if (user) {
         return {
             status: 400,
@@ -51,7 +54,10 @@ async login(bodyData) {
     const email = bodyData.email;
     const password = bodyData.password;
 
-    const user = await userRepository.findByEmail(bodyData.email)
+    const dataObj = {
+             email
+         }
+    const user = await userRepository.find(dataObj)
 
     if(!user) {
         return {
@@ -101,7 +107,10 @@ async login(bodyData) {
 async forgotPassword(bodyData) {
     const email = bodyData.email;
 
-    const user = await userRepository.findByEmail(bodyData.email)
+    const dataObj = {
+             email
+         }
+    const user = await userRepository.find(dataObj)
 
     if(!user) {
         return {
@@ -118,7 +127,9 @@ async forgotPassword(bodyData) {
         login: user.login
     }
 
-    userRepository.updatePasswordToken(data, token, passwordExpires)
+  const updateDataObj = {$set:{resetPasswordToken: token, resetPasswordExpires: passwordExpires }}
+
+    userRepository.update(data, updateDataObj)
 
         const transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -194,6 +205,74 @@ async forgotPassword(bodyData) {
     // });
     // return processingResult
 } 
+
+async resetPassword(token) {
+    const dataObj = {
+                resetPasswordToken: token,
+                resetPasswordExpires: {
+        $gte: Date.now()
+    }
+            }
+    const user = await userRepository.find(dataObj)
+    console.log(user)
+     if (user == null) {
+        console.error('Password reset link is invalid or has expired');
+        return {
+            status: 403,
+            data: "password reset link is invalid or has expired"
+        }
+      } else {
+        return {
+            status: 200,
+            data: {
+          login: user.login,
+          message: 'password reset link a-ok',
+        }
+        }
+      }
+}
+
+async updatePasswordViaEmail(dataObj, password) {
+
+    const user = await userRepository.find(dataObj)
+    console.log(user)
+    if (user == null) {
+        console.error('password reset link is invalid or has expired');
+        return {
+            status: 403,
+            data: 'password reset link is invalid or has expired'
+        }
+      } else if (user != null) {
+        return new Promise((resolve, reject) => {
+        console.log('user exists in db');
+        bcrypt
+          .hash(password, 10)
+          .then(hashedPassword => {
+
+    const data = {
+        login: dataObj.login
+    }
+  const updateDataObj = {$set:{password: hashedPassword, resetPasswordToken: "null", resetPasswordExpires: new Date() }}
+
+            userRepository.update(data, updateDataObj);
+          })
+          .then(() => {
+            console.log('password updated');
+
+            resolve({
+            status: 200,
+            data: { message: 'password updated' }
+        })
+          });
+      })
+      } else {
+        console.error('no user exists in db to update');
+        return {
+            status: 401,
+            data: 'no user exists in db to update'
+        }
+      }
+    }
 }
 
 module.exports = new UserService();

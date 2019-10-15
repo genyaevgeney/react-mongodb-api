@@ -1,91 +1,180 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { resetPassword } from '../actions/authentication';
-import classnames from 'classnames';
 import Navbar from './Navbar';
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
 
 class ResetPassword extends Component {
+  constructor() {
+    super();
 
-    constructor() {
-        super();
-        this.state = {
-            email: '',
-            errors: {}
-        }
+    this.state = {
+      validPasErrMsg: '',
+      isValidPass: true,
+      login: '',
+      password: '',
+      updated: false,
+      isLoading: true,
+      error: false,
+    };
 
-        this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
+  }
 
-    handleInputChange(e) {
+  async componentDidMount() {
+    try {
+      const response = await axios.get('http://react-mongodb-api.com/reset', {
+        params: {
+          resetPasswordToken: this.props.ownProps.params.token,
+        },
+      });
+      // console.log(response);
+      if (response.data.message === 'password reset link a-ok') {
+        this.setState({
+          login: response.data.login,
+          updated: false,
+          isLoading: false,
+          error: false,
+        });
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      this.setState({
+        updated: false,
+        isLoading: false,
+        error: true,
+      });
+    }
+  }
+
+  // handleChange = name => (event) => {
+  //   this.setState({
+  //     [name]: event.target.value,
+  //   });
+  // };
+
+  handleInputChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
 
-    async handleSubmit(e) {
-        e.preventDefault();
-        const data = {
-            email: this.state.email
-        }
-        const isSuccessSendingMail = await this.props.resetPassword(data);
-        console.log(isSuccessSendingMail)
-        if(isSuccessSendingMail) this.props.ownProps.router.push('/login')
+async handleSubmit(e) {
+        // e.preventDefault();
+        // const user = {
+        //     name: this.state.name,
+        //     email: this.state.email,
+        //     password: this.state.password,
+        //     password_confirm: this.state.password_confirm
+        // }
+        // let { data } = await this.props.registerUser(user);
+        // if(data.isSuccessRegistration) this.props.loginUser(user)
 
+
+
+          e.preventDefault();
+    const { login, password } = this.state;
+    try {
+      const response = await axios.put(
+        'http://react-mongodb-api.com/updatePasswordViaEmail',
+        {
+          login,
+          password,
+          resetPasswordToken: this.props.ownProps.params.token,
+        },
+      );
+      console.log(response.data);
+      if (response.data.message === 'password updated') {
+        this.setState({
+          updated: true,
+          error: false,
+        });
+      } else {
+        this.setState({
+          updated: false,
+          error: true,
+        });
+      }
+    } catch (error) {
+      this.setState({
+          isValidPass: false
+        });
+      this.state.validPasErr = error.response.data
+    }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.errors) {
-            this.setState({
-                errors: nextProps.errors
-            });
-        }
+  render() {
+    const {
+ error, isLoading, updated, isValidPass, validPasErrMsg
+} = this.state;
+    if (error) {
+      return (
+        <div>
+          <Navbar />
+          <div class="alert alert-danger">
+  <strong>Danger!</strong> Problem resetting password. Please send another reset link.
+</div>
+        </div>
+      );
     }
-
-    render() {
-        const { errors } = this.state;
-        return(
-            <div>
-            <Navbar/>
+    if (isLoading) {
+      return (
+        <div>
+          <Navbar />
+          <div>Loading User Data...</div>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <Navbar />
         <div className="container" style={{ marginTop: '50px', width: '700px'}}>
-            <h2 style={{marginBottom: '40px'}}>Reset password</h2>
+            <h2 style={{marginBottom: '40px'}}>Change password</h2>
             <form onSubmit={ this.handleSubmit }>
                 <div className="form-group">
                     <input
-                    type="email"
-                    placeholder="Email"
-                    className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.email
-                    })}
-                    name="email"
+                    type="password"
+                    placeholder="New password"
+                    className={'form-control form-control-lg'}
+                    name="password"
                     onChange={ this.handleInputChange }
-                    value={ this.state.email }
+                    value={ this.state.password }
                     />
-                    {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
                 </div>
+                {error ? console.log(error) : console.log(error)}
+                {isValidPass && (<div className="invalid-feedback">{errors.email}</div>)}
                 <div className="form-group">
                     <button type="submit" className="btn btn-primary">
-                        Reset Password
+                        Change
                     </button>
                 </div>
             </form>
         </div>
-        </div>
-        )
-    }
+
+        {updated && (
+          <div>
+            <p>
+              Your password has been successfully reset, please try logging in
+              again.
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
-ResetPassword.propTypes = {
-    resetPassword: PropTypes.func.isRequired,
-    registerUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
-};
+// ResetPassword.propTypes = {
+//   // eslint-disable-next-line react/require-default-props
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       token: PropTypes.string.isRequired,
+//     }),
+//   }),
+// };
 
 const mapStateToProps = (state, ownProps) => ({
-    auth: state.auth,
-    errors: state.errors,
     ownProps
 });
 
-export default connect(mapStateToProps,{ resetPassword })(ResetPassword)
+export default connect(mapStateToProps)(ResetPassword)

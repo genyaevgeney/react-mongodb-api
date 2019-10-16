@@ -2,7 +2,7 @@
 
 ![version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
-![Product Image](https://photos.app.goo.gl/rxKBXTM7TxnaahnE8)
+![Product Image](https://a.radikal.ru/a15/1910/63/e8131b6895be.jpg)
 
 Donation platform is a website that displays a list of donations and their statistics
 

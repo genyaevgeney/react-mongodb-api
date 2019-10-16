@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { loginUser } from '../actions/authentication';
 import classnames from 'classnames';
 import Navbar from './Navbar';
+import { Link } from 'react-router';
 
 class Login extends Component {
 
@@ -84,10 +85,11 @@ class Login extends Component {
                     />
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
-                <div className="form-group">
+                <div className="form-group d-flex justify-content-between">
                     <button type="submit" className="btn btn-primary">
                         Login User
                     </button>
+                    <Link className="nav-link" to="/reset-password">Reset password</Link>
                 </div>
             </form>
         </div>

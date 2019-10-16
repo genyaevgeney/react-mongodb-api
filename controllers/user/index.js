@@ -72,10 +72,11 @@ exports.updatePasswordViaEmail = async (req, res) => {
     }
       }
       const password = req.body.password
-      const { errors, isValid } = validateUpdatePassword(password);
+      const confirmPassword = req.body.password_confirm
+      const { errors, isValid } = validateUpdatePassword(password, confirmPassword);
 
     if(!isValid) {
-        return res.status(400).json("Passvord is not valid");
+        return res.status(400).json(errors.password);
     }
 
       

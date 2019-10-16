@@ -9,9 +9,9 @@ class ResetPassword extends Component {
 
     this.state = {
       validPasErrMsg: '',
-      isValidPass: true,
       login: '',
       password: '',
+      password_confirm: '',
       updated: false,
       isLoading: true,
       error: false,
@@ -73,13 +73,14 @@ async handleSubmit(e) {
 
 
           e.preventDefault();
-    const { login, password } = this.state;
+    const { login, password, password_confirm } = this.state;
     try {
       const response = await axios.put(
         'http://react-mongodb-api.com/updatePasswordViaEmail',
         {
           login,
           password,
+          password_confirm,
           resetPasswordToken: this.props.ownProps.params.token,
         },
       );
@@ -88,6 +89,7 @@ async handleSubmit(e) {
         this.setState({
           updated: true,
           error: false,
+          validPasErrMsg: ''
         });
       } else {
         this.setState({
@@ -97,15 +99,16 @@ async handleSubmit(e) {
       }
     } catch (error) {
       this.setState({
-          isValidPass: false
+          validPasErrMsg: error.response.data,
+          password: '',
+          password_confirm: ''
         });
-      this.state.validPasErr = error.response.data
     }
     }
 
   render() {
     const {
- error, isLoading, updated, isValidPass, validPasErrMsg
+ error, isLoading, updated, validPasErrMsg
 } = this.state;
     if (error) {
       return (
@@ -125,6 +128,17 @@ async handleSubmit(e) {
         </div>
       );
     }
+    if (updated) {
+      return (
+        <div>
+          <Navbar />
+          <div class="alert alert-success">
+  <strong>Success!</strong> Your password has been successfully reset, please try logging in
+              again.
+</div>
+        </div>
+      );
+    }
     return (
       <div>
         <Navbar />
@@ -141,8 +155,19 @@ async handleSubmit(e) {
                     value={ this.state.password }
                     />
                 </div>
-                {error ? console.log(error) : console.log(error)}
-                {isValidPass && (<div className="invalid-feedback">{errors.email}</div>)}
+                <div className="form-group">
+                    <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    className={'form-control form-control-lg'}
+                    name="password_confirm"
+                    onChange={ this.handleInputChange }
+                    value={ this.state.password_confirm }
+                    />
+                </div>
+                {validPasErrMsg && (<div class="alert alert-danger">
+  <strong>Danger!</strong> {validPasErrMsg}.
+</div>)}
                 <div className="form-group">
                     <button type="submit" className="btn btn-primary">
                         Change
@@ -150,15 +175,6 @@ async handleSubmit(e) {
                 </div>
             </form>
         </div>
-
-        {updated && (
-          <div>
-            <p>
-              Your password has been successfully reset, please try logging in
-              again.
-            </p>
-          </div>
-        )}
       </div>
     );
   }

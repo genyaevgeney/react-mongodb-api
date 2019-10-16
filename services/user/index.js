@@ -146,7 +146,7 @@ async forgotPassword(bodyData) {
           text:
             'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
             + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
-            + `http://localhost:3000/reset/${token}\n\n`
+            + `<a href="http://localhost:3000/reset/${token}" style="color:white; border-radius:4px; display:inline-block; padding:10px; background-color:lightgreen">Change password</a>\n\n`
             + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
         };
 

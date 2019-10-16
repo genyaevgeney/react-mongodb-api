@@ -1,7 +1,7 @@
 const donationService = require("../../services/donation");
 
 exports.receivingDonationData = (req, res) => {
-	// console.log(req.body)
+  // console.log(req.body)
   donationService.setPostData(req.body);
 };
 
@@ -11,7 +11,10 @@ exports.renderDashboardPage = async (req, res) => {
 };
 
 exports.renderUserDashboardPage = async (req, res) => {
-  const data = await donationService.getUserPaginationPageData(req.params.id, req.params.login);
+  const data = await donationService.getUserPaginationPageData(
+    req.params.id,
+    req.params.login
+  );
   res.send(data);
 };
 

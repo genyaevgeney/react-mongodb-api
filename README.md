@@ -1,11 +1,10 @@
 # Donating Platfrom
 
-![version](https://img.shields.io/badge/version-1.0.0-blue.svg)  ![license](https://img.shields.io/badge/license-MIT-blue.svg)
+![version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
-![Product Image](https://cdn1.savepice.ru/uploads/2019/9/25/8c471e4e0f9861a26f85ee3ff689d078-full.png)
+![Product Image](https://photos.app.goo.gl/rxKBXTM7TxnaahnE8)
 
 Donation platform is a website that displays a list of donations and their statistics
-
 
 ## Installation
 
@@ -31,4 +30,3 @@ Donation platform is a website that displays a list of donations and their stati
 1. For starting the application, the following script (defined in `package.json` under `scripts`) must be called:
     - via **npm**: `npm run start` or `npm run dev` for starting the development environment, which has livereload enabled;
     - via **yarn**: `yarn start` or `yarn dev` for starting the development environment, which has livereload enabled;
-
